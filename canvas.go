@@ -550,6 +550,23 @@ func (c *Canvas) SetPalette(pal color.Palette) error {
 	return nil
 }
 
+func (c *Canvas) Graphics() (bool, error) {
+	var m int
+	err := ioctl(c.tty.Fd(), _KDGETMODE, unsafe.Pointer(&m))
+	if err != nil {
+		return false, err
+	}
+	return m == _KD_GRAPHICS, nil
+}
+
+func (c *Canvas) SetGraphics(g bool) error {
+	m := _KD_TEXT
+	if g {
+		m = _KD_GRAPHICS
+	}
+	return ioctl(c.tty.Fd(), _KDSETMODE, m)
+}
+
 func (c *Canvas) switchAcquire() {
 	ioctl(c.tty.Fd(), _VT_RELDISP, _VT_ACKACQ)
 	c.switch_state = _FB_ACTIVE

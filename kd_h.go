@@ -6,6 +6,7 @@ package framebuffer
 // <linux/kd.h>
 
 const (
+	_KD_TEXT     = 0x00
 	_KD_GRAPHICS = 0x01
 	_KDSETMODE   = 0x4B3A // set text/graphics mode
 	_KDGETMODE   = 0x4B3B // get current mode
